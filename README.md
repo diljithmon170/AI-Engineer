@@ -5,14 +5,14 @@ Welcome to my AI Engineer portfolio! This repository documents my learning, expe
 ## 📚 Contents
 
 - **pandas/**: Data analysis and manipulation with pandas.
-- **ml/**: Machine learning projects and experiments (regression, classification, etc.).
+- **ml/**: Machine learning projects and experiments (regression, classification, logistic regression, etc.).
 - **notebooks/**: Jupyter notebooks for interactive exploration.
 - **data/**: Sample datasets used for practice and projects.
 
 ## 🛠️ Skills & Tools
 
 - **Languages:** Python, SQL
-- **Libraries:** pandas, numpy, scikit-learn, matplotlib, seaborn
+- **Libraries:** pandas, numpy, scikit-learn, matplotlib, seaborn, jupyter
 - **Frameworks:** TensorFlow, PyTorch (coming soon)
 - **Tools:** Jupyter Notebook, Visual Studio Code
 
@@ -20,13 +20,14 @@ Welcome to my AI Engineer portfolio! This repository documents my learning, expe
 
 - [x] Data wrangling with pandas
 - [x] Linear regression and dummy variables
-- [ ] Classification models
+- [x] Logistic regression for classification
 - [ ] Deep learning basics
 - [ ] NLP and computer vision
 
 ## 📈 Projects
 
 - **Linear Regression:** Predicting per capita income and car prices.
+- **Logistic Regression:** Employee retention analysis.
 - **Data Visualization:** Exploring datasets with matplotlib and seaborn.
 - **Feature Engineering:** Handling categorical variables and preprocessing.
 
@@ -48,4 +49,4 @@ Aspiring AI Engineer passionate about solving real-world problems with data and 
 
 ---
 
-Feel free to
+Feel free to explore, fork, and contribute! Let's connect and innovate together in the field of AI.

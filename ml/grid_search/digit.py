@@ -72,7 +72,7 @@ model_params = {
         }  
     },
     'random_forest': {
-        'model': RandomForestClassifier(),
+        'model': RandomForestClassifier(n_estimators=10),
         'params' : {
             'n_estimators': [1,5,10]
         }

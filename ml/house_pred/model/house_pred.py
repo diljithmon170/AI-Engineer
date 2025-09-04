@@ -143,4 +143,105 @@ df9 =df8[df8.bath < df8.bhk + 2]
 
 # remove columns that are not required for model building
 df10 = df9.drop(['size', 'price_per_sqft'], axis='columns')
-print(df10.head(3))
+# print(df10.head(3))
+
+# One Hot Encoding for location
+dummies = pd.get_dummies(df10.location).astype(int)
+# print(dummies.head(3))
+df11 = pd.concat([df10, dummies.drop('other', axis='columns')], axis='columns')
+# print(df11.head(3))
+
+df12 = df11.drop('location', axis='columns')
+# print(df12.head(3))
+
+# Define x and y for model training
+X = df12.drop('price', axis='columns')
+y = df12.price
+
+# Train Test Split
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=10)
+
+from sklearn.linear_model import LinearRegression
+lr_clf = LinearRegression()
+lr_clf.fit(X_train, y_train)
+# print(lr_clf.score(X_test, y_test))
+
+# Use K Fold cross validation to measure accuracy of our LinearRegression model
+from sklearn.model_selection import ShuffleSplit
+from sklearn.model_selection import cross_val_score
+
+cv = ShuffleSplit(n_splits=5, test_size=0.2, random_state=0)
+cross_val_score(LinearRegression(), X, y, cv=cv)
+# print(cross_val_score(LinearRegression(), X, y, cv=cv))
+
+# Find best model using GridSearchCV
+from sklearn.model_selection import GridSearchCV
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.linear_model import Lasso
+
+def find_best_model_using_gridsearchcv(X, y):
+    algos = {
+        'linear_regression': {
+            'model': LinearRegression(),
+            'params': {
+                'fit_intercept': [True, False],
+                'copy_X': [True, False]
+            }
+        },
+        'lasso': {
+            'model': Lasso(),
+            'params': {
+                'alpha': [1, 2],
+                'selection': ['random', 'cyclic']
+            }
+        },
+        'decision_tree': {
+            'model': DecisionTreeRegressor(),
+            'params': {
+                'criterion': ['squared_error', 'friedman_mse'],
+                'splitter': ['best', 'random']
+            }
+        }
+    }
+    scores = []
+    cv = ShuffleSplit(n_splits=5, test_size=0.2, random_state=0)
+    for algo_name, config in algos.items():
+        gs = GridSearchCV(config['model'], config['params'], cv=5, return_train_score=False)
+        gs.fit(X, y)
+        scores.append({
+            'model': algo_name,
+            'best_score': gs.best_score_,
+            'best_params': gs.best_params_
+        })
+    return pd.DataFrame(scores, columns=['model', 'best_score', 'best_params'])
+# print(find_best_model_using_gridsearchcv(X, y))
+
+# Based on above results we can say that LinearRegression gives the best score. Hence we will use that.
+# Test the model for few properties
+
+def predict_price(location, sqft, bath, bhk):
+    loc_index = np.where(X.columns == location)[0][0]
+
+    x = np.zeros(len(X.columns))
+    x[0] = sqft
+    x[1] = bath
+    x[2] = bhk
+    if loc_index >= 0:
+        x[loc_index] = 1
+
+    return lr_clf.predict([x])[0]
+# print(predict_price('1st Phase JP Nagar', 1000, 2, 2))
+
+# export the tested model to a pickle file
+import pickle
+with open('house_price_model.pickle', 'wb') as f:
+    pickle.dump(lr_clf, f)
+
+# export location and column information to a file that will be useful later on in our prediction application
+import json
+columns = {
+    'data_columns': [col.lower() for col in X.columns]
+}
+with open("columns.json", "w") as f:
+    f.write(json.dumps(columns))

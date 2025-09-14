@@ -5,7 +5,7 @@ function getBathValue() {
       return parseInt(uiBathrooms[i].value);
     }
   }
-  return -1; // Invalid Value
+  return -1;
 }
 
 function getBHKValue() {
@@ -15,16 +15,21 @@ function getBHKValue() {
       return parseInt(uiBHK[i].value);
     }
   }
-  return -1; // Invalid Value
+  return -1;
 }
 
 function onClickedEstimatePrice() {
-  console.log("Estimate price button clicked");
   const sqft = document.getElementById("uiSqft").value;
   const bhk = getBHKValue();
   const bathrooms = getBathValue();
   const location = document.getElementById("uiLocations").value;
   const estPrice = document.getElementById("uiEstimatedPrice");
+
+  if (!sqft || !location) {
+    estPrice.classList.remove("d-none");
+    estPrice.innerHTML = `<h2 class="text-danger">⚠ Please fill all fields</h2>`;
+    return;
+  }
 
   const url = "http://127.0.0.1:5000/predict_home_price";
 
@@ -34,23 +39,21 @@ function onClickedEstimatePrice() {
     bath: bathrooms,
     location: location
   }, function (data, status) {
+    estPrice.classList.remove("d-none");
     if (data.estimated_price !== undefined) {
       estPrice.innerHTML = `<h2>${data.estimated_price} Lakh</h2>`;
     } else {
       estPrice.innerHTML = `<h2>Error: Unable to estimate price</h2>`;
     }
-    console.log(status);
   });
 }
 
 function onPageLoad() {
-  console.log("document loaded");
   const url = "http://127.0.0.1:5000/get_location_names";
   $.get(url, function (data, status) {
-    console.log("got response for get_location_names request");
     if (data && data.locations) {
       const uiLocations = document.getElementById("uiLocations");
-      uiLocations.innerHTML = "";
+      uiLocations.innerHTML = '<option value="" disabled selected>Choose a Location</option>';
       data.locations.forEach(function (loc) {
         const opt = new Option(loc, loc);
         uiLocations.appendChild(opt);

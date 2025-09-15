@@ -99,7 +99,7 @@ button.btn-primary:hover {
 
 /* Result box */
 .result {
-  background: #fdfcfb;
+  background: linear-gradient(90deg, #e0f7fa 0%, #b2ebf2 100%);
   border-radius: 10px;
   font-size: 1.3em;
   color: #34495e;
@@ -107,4 +107,34 @@ button.btn-primary:hover {
   padding: 15px;
   margin-top: 18px;
   box-shadow: 0 4px 10px rgba(44, 62, 80, 0.1);
+}
+
+/* BHK radio button group background color blue */
+#bhk-group .btn,
+#bhk-group .btn-outline-primary {
+  background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+  color: #fff;
+  border: none;
+}
+
+#bhk-group .btn-check:checked + .btn {
+  background: linear-gradient(135deg, #1565c0 0%, #64b5f6 100%);
+  color: #fff;
+  border: none;
+}
+
+/* Bedrooms options background color blue */
+#bhk-group label {
+  background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  margin-right: 4px;
+  transition: 0.2s;
+}
+
+#bhk-group input:checked + label {
+  background: linear-gradient(135deg, #1565c0 0%, #64b5f6 100%);
+  color: #fff;
+  border: none;
 }

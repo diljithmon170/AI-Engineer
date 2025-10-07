@@ -1,5 +1,7 @@
 venv
 AI Engineer\venv
+venv_gpu
+AI Engineer\venv_gpu
 __pycache__
 *.pyc
 *.pyo

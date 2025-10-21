@@ -8,3 +8,4 @@ __pycache__
 *.pyd
 .Python
 env
+dl\emotion_dec\archive

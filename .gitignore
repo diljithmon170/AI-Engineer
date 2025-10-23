@@ -10,3 +10,4 @@ __pycache__
 env
 dl\emotion_dec\archive
 archive
+.env

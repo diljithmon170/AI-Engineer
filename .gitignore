@@ -11,3 +11,4 @@ env
 dl\emotion_dec\archive
 archive
 .env
+vectorstore

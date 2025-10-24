@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FastAPI Q&A Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f1724;
+      color: #e6eef8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+    h1 { color: #06b6d4; }
+    .container {
+      background: rgba(255,255,255,0.05);
+      padding: 20px;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      margin-top: 10px;
+      font-size: 1rem;
+    }
+    input {
+      background: #1e293b;
+      color: white;
+    }
+    button {
+      background: #06b6d4;
+      color: #022;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .answer-box {
+      margin-top: 20px;
+      background: #1e293b;
+      padding: 15px;
+      border-radius: 5px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Q & A (FastAPI Demo)</h1>
+  <div class="container">
+    <label for="question">Ask a Question:</label>
+    <input type="text" id="question" placeholder="Type your question here..." />
+    <button id="askBtn">Get Answer</button>
+
+    <div class="answer-box" id="answerBox">
+      <h3>Answer:</h3>
+      <p id="answerText"></p>
+    </div>
+  </div>
+
+  <script>
+    const askBtn = document.getElementById('askBtn');
+    const questionInput = document.getElementById('question');
+    const answerBox = document.getElementById('answerBox');
+    const answerText = document.getElementById('answerText');
+
+    askBtn.addEventListener('click', async () => {
+      const question = questionInput.value.trim();
+      if (!question) {
+        alert('Please type a question first!');
+        return;
+      }
+
+      // Send question to backend
+      try {
+        const res = await fetch('http://127.0.0.1:8000/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question })
+        });
+
+        const data = await res.json();
+        answerText.innerHTML = data.answer.replace(/\n/g, "<br>");
+        answerBox.style.display = 'block';
+      } catch (err) {
+        answerText.innerHTML = '⚠️ Error: Could not connect to the server.';
+        answerBox.style.display = 'block';
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>
